@@ -14,6 +14,7 @@ php artisan config:clear --no-interaction || true
 php artisan route:clear --no-interaction || true
 php artisan key:generate --force --no-interaction || true
 php artisan migrate --force
+php artisan db:seed --force --no-interaction
 php artisan config:cache
 php artisan route:cache
 

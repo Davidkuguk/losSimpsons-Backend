@@ -68,11 +68,70 @@ class PersonajeController extends Controller
 
     private function toAngularCharacter(Personaje $personaje): array
     {
+        $presentation = $this->getCharacterPresentation($personaje);
+
         return [
             'id' => $personaje->id,
             'name' => $personaje->nombre,
             'category' => $personaje->tipo,
             'hairColor' => $personaje->color_pelo,
+            'status' => $presentation['status'],
+            'image' => $presentation['image'],
+            'alt' => $presentation['alt'],
+            'cardClass' => $presentation['cardClass'],
+        ];
+    }
+
+    private function getCharacterPresentation(Personaje $personaje): array
+    {
+        $baseCharacters = [
+            'homer' => [
+                'status' => 'Registrado',
+                'image' => 'img/optimized/homero.png',
+                'alt' => 'Homer Simpson',
+                'cardClass' => 'bg-warning',
+            ],
+            'marge' => [
+                'status' => 'Desbloqueada',
+                'image' => 'img/optimized/margepng.png',
+                'alt' => 'Marge Simpson',
+                'cardClass' => 'bg-primary text-white',
+            ],
+            'bart' => [
+                'status' => 'Registrado',
+                'image' => 'img/optimized/bart.png',
+                'alt' => 'Bart Simpson',
+                'cardClass' => 'bg-danger text-white',
+            ],
+            'lisa' => [
+                'status' => 'Desbloqueada',
+                'image' => 'img/optimized/lisa.png',
+                'alt' => 'Lisa Simpson',
+                'cardClass' => 'bg-info',
+            ],
+            'mr. burns' => [
+                'status' => 'Registrado',
+                'image' => 'img/optimized/mrBurns.png',
+                'alt' => 'Mr. Burns',
+                'cardClass' => 'bg-dark text-white',
+            ],
+            'milhouse' => [
+                'status' => 'Desbloqueado',
+                'image' => 'img/optimized/milhouse.png',
+                'alt' => 'Milhouse Van Houten',
+                'cardClass' => 'bg-secondary text-white',
+            ],
+            'maggie' => [
+                'status' => 'Desbloqueado',
+                'image' => 'img/optimized/maggie.png',
+                'alt' => 'Maggie Simpson',
+                'cardClass' => 'bg-warning text-white',
+            ],
+        ];
+
+        $key = mb_strtolower(trim($personaje->nombre));
+
+        return $baseCharacters[$key] ?? [
             'status' => 'Registrado',
             'image' => 'img/optimized/casa.png',
             'alt' => $personaje->nombre,
