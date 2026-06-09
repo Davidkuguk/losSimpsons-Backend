@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Memoria de despliegue - SimpsonsDex</title>
+  <style>
+    body {
+      max-width: 820px;
+      margin: 40px auto;
+      padding: 0 28px;
+      font-family: Arial, sans-serif;
+      line-height: 1.55;
+      color: #212529;
+    }
+
+    h1 {
+      border-bottom: 4px solid #f7d51d;
+      padding-bottom: 12px;
+    }
+
+    h2 {
+      margin-top: 28px;
+      color: #111;
+    }
+
+    code {
+      background: #f1f3f5;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+
+    pre {
+      background: #f1f3f5;
+      border-left: 4px solid #f7d51d;
+      padding: 12px;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+    }
+
+    a {
+      color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Memoria de despliegue - SimpsonsDex</h1>
+
+  <h2>Enlaces publicos</h2>
+  <ul>
+    <li>Frontend Angular: <a href="https://lossimpsonsdex.onrender.com/">https://lossimpsonsdex.onrender.com/</a></li>
+    <li>Backend Laravel: <a href="https://lossimpsons-backend.onrender.com/personajes/create">https://lossimpsons-backend.onrender.com/personajes/create</a></li>
+    <li>API de personajes: <a href="https://lossimpsons-backend.onrender.com/api/personajes">https://lossimpsons-backend.onrender.com/api/personajes</a></li>
+  </ul>
+
+  <h2>Estructura del proyecto</h2>
+  <p>El proyecto esta dividido en dos aplicaciones independientes:</p>
+  <ul>
+    <li><code>losSimpsonsDex-Frontend</code>: aplicacion Angular encargada de la interfaz de usuario.</li>
+    <li><code>losSimpsons-Backend</code>: aplicacion Laravel encargada del formulario, la API REST y la persistencia de personajes.</li>
+  </ul>
+  <p>Ambos proyectos se han subido a GitHub y se han desplegado como servicios separados en Render.</p>
+
+  <h2>Despliegue del frontend Angular</h2>
+  <p>El frontend se ha desplegado en Render como Static Site.</p>
+  <p>Configuracion principal:</p>
+  <ul>
+    <li>Comando de build: <code>npm ci &amp;&amp; npm run build</code></li>
+    <li>Carpeta publicada: <code>dist/losSimpsonsDex/browser</code></li>
+    <li>Version de Node: <code>22.12.0</code></li>
+  </ul>
+  <p>La aplicacion Angular usa el fichero <code>environment.prod.ts</code> para conectarse al backend publicado:</p>
+  <pre><code>apiBaseUrl: 'https://lossimpsons-backend.onrender.com'</code></pre>
+  <p>Tambien se ha configurado una regla de rewrite hacia <code>index.html</code> para que las rutas de Angular funcionen correctamente en produccion.</p>
+
+  <h2>Despliegue del backend Laravel</h2>
+  <p>El backend se ha desplegado en Render como Web Service usando Docker.</p>
+  <p>Configuracion principal:</p>
+  <ul>
+    <li>Imagen base: <code>php:8.2-apache</code></li>
+    <li>Servidor web: Apache apuntando a la carpeta <code>public</code></li>
+    <li>Instalacion de dependencias PHP con Composer</li>
+    <li>Base de datos SQLite</li>
+    <li>Script de arranque: <code>render-start.sh</code></li>
+  </ul>
+  <p>Durante el arranque se preparan las carpetas necesarias, se crea el archivo SQLite, se ejecutan las migraciones, se cargan los datos iniciales y se cachea la configuracion:</p>
+  <pre><code>php artisan migrate --force
+php artisan db:seed --force --no-interaction
+php artisan config:cache
+php artisan route:cache</code></pre>
+
+  <h2>Integracion entre frontend y backend</h2>
+  <p>El frontend consume la API REST del backend mediante HTTP.</p>
+  <p>Endpoints principales:</p>
+  <ul>
+    <li><code>GET /api/personajes</code>: obtiene el listado de personajes.</li>
+    <li><code>POST /api/personajes</code>: crea un nuevo personaje.</li>
+    <li><code>DELETE /api/personajes/{personaje}</code>: elimina un personaje.</li>
+  </ul>
+  <p>El backend tiene CORS configurado para permitir las peticiones desde el frontend publicado en Render.</p>
+
+  <h2>Verificacion</h2>
+  <p>Se ha comprobado que:</p>
+  <ul>
+    <li>El frontend carga correctamente desde su URL publica.</li>
+    <li>El backend responde correctamente desde su URL publica.</li>
+    <li>La API devuelve datos en formato JSON.</li>
+    <li>Los personajes basicos aparecen en la API.</li>
+    <li>La creacion de personajes desde el frontend se comunica con el backend.</li>
+  </ul>
+
+  <h2>Conclusion</h2>
+  <p>La aplicacion SimpsonsDex queda desplegada publicamente en Render con frontend Angular y backend Laravel comunicandose correctamente en entorno de produccion.</p>
+</body>
+</html>
